@@ -57,3 +57,5 @@ https://pyshine.com/How-to-send-audio-from-PyAudio-over-socket/
 
 Server apadpted from:
 https://github.com/amurzeau/waveOverUDP
+and
+https://gist.github.com/ViennaMike/70c6a47ad5309a06f03faed047b1df11

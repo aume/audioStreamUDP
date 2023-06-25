@@ -2,7 +2,7 @@ import socket
 import threading, pyaudio, time, queue
 
 
-HOST = '127.0.0.1' # local
+HOST = '' # Symbolic name - all available interfaces
 PORT = 50007 # listen on the port
 
 CHUNK = 1024
