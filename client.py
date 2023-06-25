@@ -1,14 +1,12 @@
-# Welcome to PyShine
-# This is client code to receive video and audio frames over UDP
-# https://pyshine.com/How-to-send-audio-from-PyAudio-over-socket/
 import socket
-import threading, wave, pyaudio, time, queue
+import threading, pyaudio, time, queue
 
 
-HOST = '127.0.0.1'
-PORT = 50007
+HOST = '127.0.0.1' # local
+PORT = 50007 # listen on the port
 
 CHUNK = 1024
+JITTER_LAG = 0.25
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
@@ -48,7 +46,7 @@ def audio_stream_UDP():
 			print('Queue size...',q.qsize())
 	t1 = threading.Thread(target=getAudioData, args=())
 	t1.start()
-	time.sleep(0.1)
+	time.sleep(JITTER_LAG)
 	print('Now Playing...')
 	while True:
 		frame = q.get()
@@ -57,8 +55,6 @@ def audio_stream_UDP():
 	client_socket.close()
 	print('Audio closed')
 	os._exit(1)
-
-
 
 t1 = threading.Thread(target=audio_stream_UDP, args=())
 t1.start()

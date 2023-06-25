@@ -12,6 +12,7 @@ CHANNELS = 1
 RATE = 44100
 BUFF_SIZE = 65536
 
+# pyaudio call back function to send packets
 def callback(in_data, frame_count, time_info, status):
     server_socket.sendto(in_data, (HOST, PORT))    
     return (in_data, pyaudio.paContinue)
