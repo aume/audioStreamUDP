@@ -11,23 +11,34 @@ Minimal frame drops was a happy expereince.
 
 # Server Settings
 HOST = '10.0.0.189' # send to this IP
+
 PORT = 50007 # with this port
 
 CHUNK = 1024
+
 FORMAT = pyaudio.paInt16
+
 CHANNELS = 1
+
 RATE = 44100
+
 BUFF_SIZE = 65536
 
 # Client Settings
 HOST = '127.0.0.1' # local
+
 PORT = 50007 # listen on the port
 
 CHUNK = 1024
+
 JITTER_LAG = 0.25
+
 FORMAT = pyaudio.paInt16
+
 CHANNELS = 1
+
 RATE = 44100
+
 BUFF_SIZE = 65536
 
 # To Run
