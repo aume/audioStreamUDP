@@ -25,7 +25,7 @@ RATE = 44100
 BUFF_SIZE = 65536
 
 # Client Settings
-HOST = '127.0.0.1' # local
+HOST = '' # Symbolic name for all available (no need to change) 
 
 PORT = 50007 # listen on the port
 
