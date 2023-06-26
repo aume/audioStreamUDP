@@ -1,4 +1,4 @@
-import socket
+import socket, sys
 import threading, pyaudio, time, queue
 
 
