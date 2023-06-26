@@ -6,7 +6,7 @@ HOST = '' # Symbolic name - all available interfaces
 PORT = 50007 # listen on the port
 
 CHUNK = 1024
-JITTER_LAG = 0.25
+PRE_BUFFER = 0.25
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
@@ -46,7 +46,7 @@ def audio_stream_UDP():
 			print('Queue size...',q.qsize())
 	t1 = threading.Thread(target=getAudioData, args=())
 	t1.start()
-	time.sleep(JITTER_LAG)
+	time.sleep(PRE_BUFFER)
 	print('Now Playing...')
 	while True:
 		frame = q.get()
