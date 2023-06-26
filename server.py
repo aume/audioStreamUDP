@@ -5,22 +5,26 @@ import time
 
 import numpy as np
 
-CLIENT = '10.0.0.189' # send to this IP
+AUDIO_INTERFACE = 'BlackHole 16ch'
+
+
+CLIENTS = ['127.0.0.1'] # a list of clients to send packets
 PORT = 50007 # with this port
-CLIENTS = ['10.0.0.189'] # a list of clients to send packets
-CHANNEL_MAP = [{'ch':0,'ip':CLIENTS[0]},]
+
+CHANNEL_MAP = [{'ch':15,'ip':CLIENTS[0]},]
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-CHANNELS = 1
 RATE = 44100
 BUFF_SIZE = 65536
+
+n_channels = -1 ; # reassigned with the find device function
 
 # pyaudio call back function to send packets
 def callback(in_data, frame_count, time_info, status):
     data_array = np.frombuffer(in_data, dtype='int16')
     for entity in CHANNEL_MAP:
-        channel = data_array[entity['ch']::CHANNELS]
+        channel = data_array[entity['ch']::n_channels] # an error check here for ch<n_channels
         data_str = channel.tobytes()  # Use tobytes instead of tostring
         server_socket.sendto(data_str, (entity['ip'], PORT))    
     return (in_data, pyaudio.paContinue)
@@ -38,11 +42,12 @@ def find_device_index(device_name):
         print(i, name, dev['maxInputChannels'], dev['maxOutputChannels'])
         if name.find(device_name) >= 0 and dev['maxInputChannels'] > 0:
             found = i
+            n_ch = int(dev['maxInputChannels'])
             break
-    return found
+    return found,n_ch
 
 
-device_index = find_device_index('MacBook Air Microphone')
+device_index,n_channels = find_device_index(AUDIO_INTERFACE)
 if device_index < 0:
     print('No device found')
     sys.exit(1)
@@ -55,9 +60,10 @@ except socket.error:
     print('Failed to create socket')
     sys.exit()
 
+print(n_channels)
 # Open stream using callback
 stream = p_audio.open(format=FORMAT,
-            channels=CHANNELS,
+            channels=n_channels,
             rate=RATE,
             frames_per_buffer=CHUNK,
             input=True,
