@@ -8,15 +8,22 @@ import numpy as np
 AUDIO_INTERFACE = 'BlackHole 16ch'
 
 
-CLIENTS = ['127.0.0.1'] # a list of clients to send packets
+CLIENTS = ['127.0.0.1', 
+           '10.0.0.189', 
+           '10.0.0.1', 
+           '10.0.0.4', 
+           '10.0.0.3', 
+           '10.0.0.2'] # a list of clients to send packets
 PORT = 50007 # with this port
 
-CHANNEL_MAP = [{'ch':15,'ip':CLIENTS[0]},]
+CHANNEL_MAP = [{'ch':15,'ip':CLIENTS[0]},
+               {'ch':2,'ip':CLIENTS[1]},
+               ]
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
 RATE = 44100
-BUFF_SIZE = 65536
+#BUFF_SIZE = 65536
 
 n_channels = -1 ; # reassigned with the find device function
 
