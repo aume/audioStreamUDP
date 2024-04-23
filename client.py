@@ -2,11 +2,11 @@ import socket, sys
 import threading, pyaudio, time, queue
 
 
-HOST = '' # Symbolic name - all available interfaces
+HOST = '' # 
 PORT = 50007 # listen on the port
 
-CHUNK = 1024
-PRE_BUFFER = 0.25
+CHUNK = 2048
+PRE_BUFFER = 0.5
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
@@ -14,16 +14,15 @@ BUFF_SIZE = 65536
 
 host_name = socket.gethostname()
 host_ip = HOST
-print(host_ip)
 port = PORT
+BUFF_SIZE = 65536
 
 
 q = queue.Queue(maxsize=2000)
 
 def audio_stream_UDP():
-	BUFF_SIZE = 65536
 	client_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-	#client_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
+	client_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
 	p = pyaudio.PyAudio()
 	stream = p.open(format=FORMAT,
 					channels=1,
@@ -43,14 +42,23 @@ def audio_stream_UDP():
 		while True:
 			frame,_= client_socket.recvfrom(BUFF_SIZE)
 			q.put(frame)
-			print('Queue size...',q.qsize())
+			print('Queue size...',q.qsize(), len(frame))
+
 	t1 = threading.Thread(target=getAudioData, args=())
 	t1.start()
 	time.sleep(PRE_BUFFER)
 	print('Now Playing...')
+	frame = ''
+	pframe = ''
 	while True:
-		frame = q.get()
-		stream.write(frame)
+		# handle underflow errors
+		if q.empty():
+			frame = pframe
+			print('empty queue')
+		else:
+			frame = q.get()
+			pframe = frame
+		stream.write(frame, exception_on_underflow=True)
 
 	client_socket.close()
 	print('Audio closed')

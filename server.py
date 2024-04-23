@@ -5,25 +5,31 @@ import time
 
 import numpy as np
 
-AUDIO_INTERFACE = 'BlackHole 16ch'
+CHUNK = 2048
+RATE = 44100
+BUFF_SIZE = 65536
+
+AUDIO_INTERFACE = 'MacBook Air Microphone'#'BlackHole 16ch'
 
 
+
+FORMAT = pyaudio.paInt16
+
+
+PORT = 50007 # send to this port
+
+# multicast client list
 CLIENTS = ['127.0.0.1', 
-           '10.0.0.189', 
+           '192.168.1.3', 
            '10.0.0.1', 
            '10.0.0.4', 
            '10.0.0.3', 
            '10.0.0.2'] # a list of clients to send packets
-PORT = 50007 # with this port
 
-CHANNEL_MAP = [{'ch':15,'ip':CLIENTS[0]},
-               {'ch':2,'ip':CLIENTS[1]},
+# specify which audio channel to send to which client
+CHANNEL_MAP = [{'ch':0,'ip':CLIENTS[0]},
+               {'ch':0,'ip':CLIENTS[1]},
                ]
-
-CHUNK = 1024
-FORMAT = pyaudio.paInt16
-RATE = 44100
-#BUFF_SIZE = 65536
 
 n_channels = -1 ; # reassigned with the find device function
 
@@ -62,7 +68,7 @@ if device_index < 0:
 # create dgram udp socket
 try:
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
+    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
 except socket.error:
     print('Failed to create socket')
     sys.exit()
