@@ -8,16 +8,11 @@ import numpy as np
 CHUNK = 2048
 RATE = 44100
 BUFF_SIZE = 65536
+FORMAT = pyaudio.paInt16
 
 AUDIO_INTERFACE = 'MacBook Air Microphone'#'BlackHole 16ch'
 
-
-
-FORMAT = pyaudio.paInt16
-
-
 PORT = 50007 # send to this port
-
 # multicast client list
 CLIENTS = ['127.0.0.1', 
            '192.168.1.3', 

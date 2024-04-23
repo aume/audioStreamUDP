@@ -10,19 +10,27 @@ Tested with server running from M2 mac laptop and client on RPi4 over WLAN
 Minimal frame drops was a happy expereince. 
 
 # Server Settings
-HOST = '10.0.0.189' # send to this IP
-
-PORT = 50007 # with this port
-
-CHUNK = 1024
-
+CHUNK = 2048
+RATE = 44100
+BUFF_SIZE = 65536
 FORMAT = pyaudio.paInt16
 
-CHANNELS = 1
+AUDIO_INTERFACE = 'MacBook Air Microphone'#'BlackHole 16ch'
 
-RATE = 44100
+PORT = 50007 # send to this port
+## multicast client list
+CLIENTS = ['127.0.0.1', 
+           '192.168.1.3', 
+           '10.0.0.1', 
+           '10.0.0.4', 
+           '10.0.0.3', 
+           '10.0.0.2'] # a list of clients to send packets
 
-BUFF_SIZE = 65536
+## specify which audio channel to send to which client
+CHANNEL_MAP = [{'ch':0,'ip':CLIENTS[0]},
+               {'ch':0,'ip':CLIENTS[1]},
+               ]
+
 
 # Client Settings
 HOST = '' # Symbolic name for all available (no need to change) 
