@@ -59,3 +59,6 @@ Server apadpted from:
 https://github.com/amurzeau/waveOverUDP
 and
 https://gist.github.com/ViennaMike/70c6a47ad5309a06f03faed047b1df11
+
+multichannel capability adapted from
+https://github.com/Tomlevron/multi-channel-audio-recorder/blob/main/audio_recorder.py
