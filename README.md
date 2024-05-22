@@ -5,6 +5,7 @@ A straght forward cmd-line point to point audio over UDP streaming server and cl
 # Requires: 
 portaudio
 pyaudio
+pyinstaller (if making portable executable)
 
 Tested with server running from M2 mac laptop and client on RPi4 over WLAN
 Minimal frame drops was a happy expereince. 
@@ -55,6 +56,9 @@ python server.py
 
 ## on the client
 python client
+
+# To create executable
+pyinstaller audio_stream_server.spec
 
 # Authors
 

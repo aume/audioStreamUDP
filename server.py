@@ -5,7 +5,7 @@ import time
 
 import numpy as np
 
-CHUNK = 2048
+CHUNK = 1024
 RATE = 44100
 BUFF_SIZE = 65536
 FORMAT = pyaudio.paInt16
@@ -16,7 +16,7 @@ PORT = 50007 # send to this port
 # multicast client list
 CLIENTS = ['127.0.0.1', 
            '192.168.1.3', 
-           '10.0.0.1', 
+           '192.168.1.7', 
            '10.0.0.4', 
            '10.0.0.3', 
            '10.0.0.2'] # a list of clients to send packets
@@ -24,6 +24,7 @@ CLIENTS = ['127.0.0.1',
 # specify which audio channel to send to which client
 CHANNEL_MAP = [{'ch':0,'ip':CLIENTS[0]},
                {'ch':0,'ip':CLIENTS[1]},
+               {'ch':0,'ip':CLIENTS[2]},
                ]
 
 n_channels = -1 ; # reassigned with the find device function
