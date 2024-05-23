@@ -1,11 +1,44 @@
 # audioStreamUDP
+A straght forward point to point audio over UDP streaming server and client, transmitting 16 bit 44100 Hz PCM over W/LAN.
 
-A straght forward cmd-line point to point audio over UDP streaming server and client, transmitting 16 bit 44100 Hz PCM over W/LAN
 
-# Requires: 
+# AudioStreamServer.py
+## Requires
+pyaudio  
+numpy  
+tkinter  
+pyinstaller (if packaging into executable)
+
+## Usage
+Change to suit needs:  
+self.sample_rate = 44100   
+self.chunk_size = 1024   
+self.interface = 'BlackHole 16ch'  
+  
+Launch script:
+python AudioStreamServer.py  
+Interface is self explanitory for adding and modifying clients.  
+The list of clients can be saved and loaded from a json file.  
+
+# AudioStreamClient.py
+Change to match server parameters
+client_port = 57001  
+rate = 44100     
+chunk_size = 1024  
+    
+Launch script:
+python AudioStreamClient.py  
+
+# To create executable
+pyinstaller audio_stream_server.spec
+
+  
+# (Deprecated)
+# server.py
+
+## Requires: 
 portaudio
 pyaudio
-pyinstaller (if making portable executable)
 
 Tested with server running from M2 mac laptop and client on RPi4 over WLAN
 Minimal frame drops was a happy expereince. 
@@ -33,7 +66,7 @@ CHANNEL_MAP = [{'ch':0,'ip':CLIENTS[0]},
                ]
 
 
-# Client Settings
+# client.py Client Settings
 HOST = '' # Symbolic name for all available (no need to change) 
 
 PORT = 50007 # listen on the port
@@ -57,8 +90,7 @@ python server.py
 ## on the client
 python client
 
-# To create executable
-pyinstaller audio_stream_server.spec
+
 
 # Authors
 
