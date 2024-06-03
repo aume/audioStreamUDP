@@ -1,6 +1,7 @@
 import socket
 import pyaudio
 import threading
+import time, queue
 
 class AudioStreamClient:
     def __init__(self, ip, port, channels, rate, chunk_size):
@@ -19,12 +20,26 @@ class AudioStreamClient:
                                       output=True,
                                       frames_per_buffer=self.chunk_size)
         self.is_receiving = False
+        self.frame_q = queue.Queue(maxsize=2000)
+        self.cframe = '' # current frame
+        self.pframe = '' # previous frame
 
     def start_receiving(self):
         self.is_receiving = True
         self.thread = threading.Thread(target=self.receive_audio)
         self.thread.start()
+        time.sleep(0.025)
         print("Started receiving audio")
+        while True:
+            # handle underflow errors
+            if self.frame_q.empty():
+                self.frame = self.pframe
+                print('empty queue')
+            else:
+                self.frame = self.frame_q.get()
+                self.pframe = self.frame
+            self.stream.write(self.frame, exception_on_underflow=True)           
+        
 
     def stop_receiving(self):
         self.is_receiving = False
@@ -34,7 +49,8 @@ class AudioStreamClient:
     def receive_audio(self):
         while self.is_receiving:
             data, _ = self.sock.recvfrom(self.chunk_size * self.channels * 2)
-            self.stream.write(data)
+            self.frame_q.put(data)
+            #self.stream.write(data)
 
     def close(self):
         self.stop_receiving()

@@ -11,9 +11,9 @@ class AudioStreamServer:
     def __init__(self):
         self.clients = {}
         self.sample_rate = 44100  # Sample rate in Hz
-        self.chunk_size = 1024  # Number of audio frames per buffer
+        self.chunk_size = 256  # Number of audio frames per buffer
 
-        self.interface = 'Tester'#'MacBook Air Microphone'#'BlackHole 16ch'
+        self.interface = 'MacBook Air Microphone'#'BlackHole 16ch'
 
         self.audio = pyaudio.PyAudio()
         # get device ID for named audio inteface
