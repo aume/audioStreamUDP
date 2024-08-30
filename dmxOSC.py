@@ -5,22 +5,24 @@ from pythonosc import dispatcher
 from pythonosc import osc_server
 from DMXEnttecPro import Controller
 
-# Setup the DMX Pro device
-
 
 # Send DMX data to the Enttec DMX Pro
-def send_dmx(dmx, channel, value):
-    dmx.set_channel(channel, value)  # Sets DMX channel 1 to max 255
+def send_dmx(dmx, values):
+    #dimmer, red, green, blue, amber, lime, wheel, temp, gobo
+    chans = [1,3,4,5,6,7,9,10,11]
+    for i in range(len(values)):
+        dmx.set_channel(chans[i], values[i])
     dmx.submit()  # Sends the update to the controller
 
 # Handler for OSC messages
-def osc_handler(unused_addr, args, ch, val):
-    print(f"Received OSC message - Channel: {ch}, Value: {val}")
-    send_dmx(args[0], ch, val)
+def osc_handler(unused_addr, args, dimmer, red, green, blue, amber, lime, wheel, temp, gobo):
+    #print(f"Received OSC message - Channel: {ch}, Value: {val}")
+    send_dmx(args[0], [dimmer, red, green, blue, amber, lime, wheel, temp, gobo])
 
 if __name__ == "__main__":
+    # Setup the DMX Pro device
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ip", default="192.168.2.249", help="The ip to listen on")
+    parser.add_argument("--ip", default='192.168.6.225', help="The ip to listen on")
     parser.add_argument("--port", type=int, default=8000, help="The port to listen on")
     parser.add_argument("--device", default="/dev/ttyUSB0", help="The DMX device")
     args = parser.parse_args()
