@@ -34,7 +34,7 @@ class AudioStreamClient:
             # handle underflow errors
             if self.frame_q.empty():
                 self.frame = self.pframe
-                print('empty queue')
+                #print('empty queue')
             else:
                 self.frame = self.frame_q.get()
                 self.pframe = self.frame
