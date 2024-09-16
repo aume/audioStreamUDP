@@ -96,7 +96,10 @@ class AudioStreamServer:
         for client_id, client_info in self.clients.items():
             channel = data_array[client_info['channel']::self.audio_channels] # an error check here for ch<n_channels
             data_str = channel.tobytes()  # Use tobytes instead of tostring
-            self.sock.sendto(data_str, (client_info['ip'], client_info['port']))   
+            try:
+                self.sock.sendto(data_str, (client_info['ip'], client_info['port']))   
+            except OSError as error : 
+                None
         return (in_data, pyaudio.paContinue)
     
     def start_streaming(self):
