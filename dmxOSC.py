@@ -5,19 +5,62 @@ from pythonosc import dispatcher
 from pythonosc import osc_server
 from DMXEnttecPro import Controller
 
+chanmap = {'dimmer':1,'red':3,'green':4, 'blue':5, 'amber':6, 'lime':7, 'wheel':9, 'temp':10, 'gobo':11}
 
 # Send DMX data to the Enttec DMX Pro
 def send_dmx(dmx, values):
     #dimmer, red, green, blue, amber, lime, wheel, temp, gobo
-    chans = [1,3,4,5,6,7,9,10,11]
+    chans = [chanmap[ch] for ch in ]
     for i in range(len(values)):
         dmx.set_channel(chans[i], values[i])
     dmx.submit()  # Sends the update to the controller
 
-# Handler for OSC messages
+# Handlers for OSC messages
 def osc_handler(unused_addr, args, dimmer, red, green, blue, amber, lime, wheel, temp, gobo):
     #print(f"Received OSC message - Channel: {ch}, Value: {val}")
     send_dmx(args[0], [dimmer, red, green, blue, amber, lime, wheel, temp, gobo])
+
+def rgb(unused_addr, args, red, green, blue):
+    dmx = args[0]
+    dmx.set_channel(chanmap['red'], red)
+    dmx.set_channel(chanmap['green'], green)
+    dmx.set_channel(chanmap['blue'], blue)
+
+def red(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["red"], val)
+
+def green(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["green"], val)
+
+def blue(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["blue"], val)
+
+def gobo(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["gobo"], val)
+
+def wheel(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["wheel"], val)
+
+def amber(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["amber"], val)
+
+def lime(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["lime"], val)
+
+def temp(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["temp"], val)
+
+def dimmer(unused_addr, args, val):
+     dmx = args[0]
+     dmx.set_channel(chanmap["dimmer"], val)
 
 if __name__ == "__main__":
     # Setup the DMX Pro device
@@ -32,6 +75,16 @@ if __name__ == "__main__":
 
     dispatcher = dispatcher.Dispatcher()
     dispatcher.map("/dmx", osc_handler, dmx)
+    dispatcher.map("/rgb", rgb, dmx)
+    dispatcher.map("/gobo", gobo, dmx)
+    dispatcher.map("/wheel", wheel, dmx)
+    dispatcher.map("/dimmer", dimmer, dmx)
+    dispatcher.map("/amber", amber, dmx)
+    dispatcher.map("/lime", lime, dmx)
+    dispatcher.map("/temp", temp, dmx)
+    dispatcher.map("/red", red, dmx)
+    dispatcher.map("/green", green, dmx)
+    dispatcher.map("/blue", blue, dmx)
 
     server = osc_server.ThreadingOSCUDPServer((args.ip, args.port), dispatcher)
     print(f"Serving on {server.server_address}")
