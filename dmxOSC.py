@@ -10,7 +10,7 @@ chanmap = {'dimmer':1,'red':3,'green':4, 'blue':5, 'amber':6, 'lime':7, 'wheel':
 # Send DMX data to the Enttec DMX Pro
 def send_dmx(dmx, values):
     #dimmer, red, green, blue, amber, lime, wheel, temp, gobo
-    chans = [chanmap[ch] for ch in ]
+    chans = [chanmap[ch] for ch in chanmap]
     for i in range(len(values)):
         dmx.set_channel(chans[i], values[i])
     dmx.submit()  # Sends the update to the controller
