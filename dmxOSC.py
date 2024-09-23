@@ -25,42 +25,52 @@ def rgb(unused_addr, args, red, green, blue):
     dmx.set_channel(chanmap['red'], red)
     dmx.set_channel(chanmap['green'], green)
     dmx.set_channel(chanmap['blue'], blue)
+    dmx.submit()
 
 def red(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["red"], val)
+     dmx.submit()
 
 def green(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["green"], val)
+     dmx.submit()
 
 def blue(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["blue"], val)
+     dmx.submit()
 
 def gobo(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["gobo"], val)
+     dmx.submit()
 
 def wheel(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["wheel"], val)
+     dmx.submit()
 
 def amber(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["amber"], val)
+     dmx.submit()
 
 def lime(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["lime"], val)
+     dmx.submit()
 
 def temp(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["temp"], val)
+     dmx.submit()
 
 def dimmer(unused_addr, args, val):
      dmx = args[0]
      dmx.set_channel(chanmap["dimmer"], val)
+     dmx.submit()
 
 if __name__ == "__main__":
     # Setup the DMX Pro device
