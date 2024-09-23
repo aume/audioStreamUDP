@@ -13,7 +13,7 @@ class AudioStreamServer:
         self.sample_rate = 44100  # Sample rate in Hz
         self.chunk_size = 256  # Number of audio frames per buffer
 
-        self.interface = 'MacBook Air Microphone'#'BlackHole 16ch'
+        self.interface = 'artwalk'#'BlackHole 16ch'
 
         self.audio = pyaudio.PyAudio()
         # get device ID for named audio inteface
@@ -187,7 +187,8 @@ class AudioStreamServerGUI(tk.Tk):
             self.client_listbox.delete(selected[0])
 
     def save_clients(self):
-        filename = simpledialog.askstring("Save Clients", "Enter filename:")
+        #filename = simpledialog.askstring("Save Clients", "Enter filename:")
+        filename="artwalkClients"
         if filename:
             self.server.save_clients(filename)
 
@@ -199,6 +200,13 @@ class AudioStreamServerGUI(tk.Tk):
                 for client_id, client_info in self.server.clients.items():
                     self.client_listbox.insert(tk.END, f"{client_id} - {client_info['ip']}:{client_info['port']} - Channel {client_info['channel']}")
 
+    def load_client_defaults(self):
+        if self.server.load_clients("artwalkClients"):
+            self.client_listbox.delete(0, tk.END)
+            for client_id, client_info in self.server.clients.items():
+                self.client_listbox.insert(tk.END, f"{client_id} - {client_info['ip']}:{client_info['port']} - Channel {client_info['channel']}")
+
+
     def on_closing(self):
         self.server.close()
         self.destroy()
@@ -206,5 +214,6 @@ class AudioStreamServerGUI(tk.Tk):
 if __name__ == "__main__":
     server = AudioStreamServer()
     gui = AudioStreamServerGUI(server)
+    gui.load_client_defaults()
     gui.protocol("WM_DELETE_WINDOW", gui.on_closing)
     gui.mainloop()
