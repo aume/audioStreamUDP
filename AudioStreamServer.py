@@ -10,7 +10,7 @@ import numpy as np
 class AudioStreamServer:
     def __init__(self):
         self.clients = {}
-        self.sample_rate = 44100  # Sample rate in Hz
+        self.sample_rate = 32000  # Sample rate in Hz
         self.chunk_size = 256  # Number of audio frames per buffer
 
         self.interface = 'artwalk'#'BlackHole 16ch'
