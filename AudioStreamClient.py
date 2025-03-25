@@ -23,6 +23,7 @@ class AudioStreamClient:
         self.frame_q = queue.Queue(maxsize=2000)
         self.cframe = '' # current frame
         self.pframe = '' # previous frame
+        self.emptyFrame = [0] * (self.chunk_size * self.channels * 2) # silence
 
     def start_receiving(self):
         self.is_receiving = True
@@ -33,12 +34,14 @@ class AudioStreamClient:
         while True:
             # handle underflow errors
             if self.frame_q.empty():
-                self.frame = self.pframe
+                self.frame = self.emptyFrame # silence or pframe if repeat
                 #print('empty queue')
             else:
+                if self.frame_q.qsize()>100:
+                    self.frame_q.queue.clear()
                 self.frame = self.frame_q.get()
                 self.pframe = self.frame
-            self.stream.write(self.frame, exception_on_underflow=True)           
+            self.stream.write(self.frame, exception_on_underflow=False)           
         
 
     def stop_receiving(self):
@@ -63,8 +66,8 @@ if __name__ == "__main__":
     client_ip = "0.0.0.0"  # Client's IP address
     client_port = 57001      # Client's port to receive audio data
     channels = 1            # Number of audio channels (e.g., mono)
-    rate = 44100            # Sample rate in Hz
-    chunk_size = 1024       # Number of audio frames per buffer
+    rate = 32000            # Sample rate in Hz
+    chunk_size = 256       # Number of audio frames per buffer
 
     client = AudioStreamClient(client_ip, client_port, channels, rate, chunk_size)
     client.start_receiving()
