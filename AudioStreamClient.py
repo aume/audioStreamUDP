@@ -23,6 +23,7 @@ class AudioStreamClient:
         self.frame_q = queue.Queue(maxsize=2000)
         self.cframe = '' # current frame
         self.pframe = '' # previous frame
+        self.emptyFrame = [0] * (self.chunk_size * self.channels * 2) # silence
 
     def start_receiving(self):
         self.is_receiving = True
@@ -33,12 +34,14 @@ class AudioStreamClient:
         while True:
             # handle underflow errors
             if self.frame_q.empty():
-                self.frame = self.pframe
+                self.frame = self.emptyFrame # silence or pframe if repeat
                 #print('empty queue')
             else:
+                if self.frame_q.qsize()>100:
+                    self.frame_q.queue.clear()
                 self.frame = self.frame_q.get()
                 self.pframe = self.frame
-                self.stream.write(self.frame, exception_on_underflow=True)           
+            self.stream.write(self.frame, exception_on_underflow=False)           
         
 
     def stop_receiving(self):
